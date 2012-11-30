@@ -51,7 +51,7 @@ end
 splitValues = splitValues(splitValues~=0);
 
 %% connect the time with the loops.
-i = 1;
+i = 2;
 loopStart = 0;
 loopStop = 0;
 while i <= length(splitValues)-1
