@@ -105,7 +105,7 @@ axis equal
 
 %% Volume
 % Add all slices together to calculate the volume
-I = sum(d.f1.*area); % cm^3 == ml
+I = sum(d.f1.*dddx1.*area); % cm^3 == ml
 %text(1, -5, 4, sprintf('Volume = %4.3f mL', I), 'BackgroundColor', [.8 .8 .8]);
 uicontrol('Style', 'text', 'String', sprintf('Volume = %4.3f mL', I),...
     'Units', 'pixels', 'Position', [0 0 150 20]);

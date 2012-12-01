@@ -36,7 +36,7 @@ function data = Measure(images, type)
 % Process Left Ventricle Data
     function processLV(~)
         data_shape = gui_lvfhtool.createMask();
-        data_coeff = Volume.determineAxis(data_shape);
+        data_coeff = Volume.DetermineAxis(data_shape);
         
         if ~isempty(gui_valveline)
             gui_valveline.delete();

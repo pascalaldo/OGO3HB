@@ -1,6 +1,12 @@
 function c = DetermineAxis(bw)
 %DETERMINEAXIS determines the long axis of the freehand drawing
 skel = bwulterode(bw);
+tot = sum(sum(skel));
+if tot <= 1
+    c = [1 0];
+    disp('Warning: Drawing is too round, using random axis');
+    return;
+end
 datap = zeros([sum(sum(skel)) 2]);
 cnt = 1;
 sz = size(skel);
