@@ -12,7 +12,9 @@ function [I dd] = AnalyseFrame(frame1, frame2)
 
 %% Load old data or launch GUI to create new data
 data1 = GUI.Measure({frame1, frame2},1);
+if data1.skip, I = -1; dd = -1; return; end
 data2 = GUI.Measure({frame1, frame2},2);
+if data2.skip, I = -1; dd = -1; return; end
 d = struct('f1',data1.factor,'f2',data2.factor,'freehand',data1.shape,'ellipse',data2.shape,'coefficients',data1.coefficients,'section',data1.section,'type',data1.type);
 clear data1 data2;
 

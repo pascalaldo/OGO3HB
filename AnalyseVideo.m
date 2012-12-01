@@ -1,4 +1,4 @@
-function AnalyseVideo(filenameLongAxis, filenameShortAxis, filenameNexfin)
+function [vt v vdd] = AnalyseVideo(filenameLongAxis, filenameShortAxis, filenameNexfin)
 %ANALYSEVIDEO Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -46,11 +46,17 @@ frames1 = read(movie1, framerange1);
 movie2 = VideoReader(filenameShortAxis);
 frames2 = read(movie2, framerange2);
 
+vt = [];
+v = [];
+vdd = [];
 for i=0:(framerange1(2)-framerange1(1))
-    [I dd] = Volume.AnalyseFrame(frames1(:,:,:,(i+1)),frames2(:,:,:,(i+1)))
+    [I dd] = Volume.AnalyseFrame(frames1(:,:,:,(i+1)),frames2(:,:,:,(i+1)));
+    if I ~= -1
+        vt = [vt; i/framerate];
+        v = [v; I];
+        vdd = [vdd; dd];
+    end
 end
-
-Volume.AnalyseFrame(frame1, frame2);
 
 end
 

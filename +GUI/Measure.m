@@ -60,6 +60,7 @@ function data = Measure(images, type)
 
 % Continue with next step
     function saveAndContinue(~,~)
+        data_skip = false;
         setReference(0, 0);
         if type == 1
             data_intersect = gui_valvelineapi.getPosition();
@@ -70,6 +71,11 @@ function data = Measure(images, type)
         elseif type == 2
             data_shape = gui_ellipseapi.getPosition();
         end
+        close(gui_main);
+    end
+
+% Skip current frame
+    function discardAndContinue(~,~)
         close(gui_main);
     end
 
@@ -92,6 +98,7 @@ data_shape = [];
 data_coeff = [0 0];
 data_intersect = [0 0 0 0];
 data_imagetype = 1;
+data_skip = true;
 
 %% Main Window
 % Read the image file
@@ -205,18 +212,21 @@ end
 %% Continue button
 gui_prpanel = uipanel('Parent', gui_controlframe, 'Title', 'Process', 'Units', 'pixels', 'Position', [620 5 300 69]);
 gui_continuebutton = uicontrol('Parent', gui_prpanel, 'Style', 'pushbutton', 'String', 'Continue',...
-            'Position', [gp_padding gp_padding 2*gp_width+gp_padding gp_bheight],...
+            'Position', [2*gp_padding+gp_width gp_padding gp_width gp_bheight],...
             'FontSize', 12, 'FontWeight', 'bold', 'BackgroundColor', [0 0 .4], 'ForegroundColor', 'w',...
             'Callback', @saveAndContinue);
 if type == 1
     set(gui_continuebutton, 'Enable', 'off');
 end
+gui_skipbutton = uicontrol('Parent', gui_prpanel, 'Style', 'pushbutton', 'String', 'Skip',...
+            'Position', [gp_padding gp_padding gp_width gp_bheight],...
+            'FontSize', 12, 'FontWeight', 'bold', 'BackgroundColor', [.2 0 .4], 'ForegroundColor', 'w',...
+            'Callback', @discardAndContinue);
 
 setReference(0,0);
 % Wait for the gui to close before returning
 waitfor(gui_mainh);
 
 % Create a structure that contains all data
-data = struct('factor',(data_refcm/data_refpix),'shape',data_shape,'coefficients',data_coeff,'section',data_intersect,'type',data_imagetype);
-end    
-    
+data = struct('factor',(data_refcm/data_refpix),'shape',data_shape,'coefficients',data_coeff,'section',data_intersect,'type',data_imagetype,'skip',data_skip);
+end
