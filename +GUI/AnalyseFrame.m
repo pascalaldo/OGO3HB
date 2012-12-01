@@ -1,4 +1,4 @@
-function [I dd time1 time2] = AnalyseFrame(filenameLongAxis, filenameShortAxis)
+function [I dd] = AnalyseFrame(frame1, frame2)
 %ANALYSEECHOS Calculate the volume of the left ventricle using echo images
 %   [I dd] = AnalyseEchos(filenameLongAxis, filenameShortAxis, loadOld)
 %   calculates the volume of the left ventricle using a echo image of the 
@@ -9,17 +9,6 @@ function [I dd time1 time2] = AnalyseFrame(filenameLongAxis, filenameShortAxis)
 %   The function returns the volume of the left ventricle (I) in mL. dd is
 %   the difference in width of the chambre between both images (in cm).
 %   Furthermore the function displays a 3D model of the ventricle.
-
-%% Handle default arguments
-if nargin < 1
-    [tempf tempp] = uigetfile('*.avi', 'Select long axis video...');
-    filenameLongAxis = fullfile(tempp,tempf)
-end
-if nargin < 2
-    [tempf tempp] = uigetfile('*.avi', 'Select long axis video...');
-    filenameShortAxis = fullfile(tempp,tempf)
-end
-[frame1 frame2 time1 time2] = GUI.ChooseFrame(filenameLongAxis, filenameShortAxis);
 
 %% Load old data or launch GUI to create new data
 data1 = GUI.Measure({frame1, frame2},1);
