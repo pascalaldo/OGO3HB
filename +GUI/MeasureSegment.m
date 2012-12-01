@@ -1,5 +1,89 @@
-function [data_refpix data_refcm data_shape data_coeff data_intersect data_imagetype] = MeasureSegment(filenames, type)
+function data = MeasureSegment(images, type)
 %MEASURESEGMENT Display a GUI to let the user draw the ventricle contours.
+
+%% GUI Functions
+% Resize and move the widgets according to the window size
+    function figResize(~,~)
+        fpos = get(gui_main,'Position');
+        set(gui_magslider, 'Position', [0 155 30 fpos(4)-155]);
+        set(gui_panel, 'Position', [30 155 fpos(3)-30 fpos(4)-155]);
+    end
+
+% Handle the magnification of the image
+    function magnifySlider(hObj, ~)
+        gui_zoomapi.setMagnification(get(hObj,'Value'));
+    end
+
+%% Processing Functions
+% Set reference values
+    function setReference(~,~)
+        data_refpix = gui_refdistapi.getDistance();
+        data_refcm = get(gui_refcm, 'Value');
+        set(gui_refstring,'String',sprintf('%3.0f pixels = ',data_refpix));
+        set(gui_factorstring,'String',sprintf('%0.4f pixels/cm',(data_refcm/data_refpix)));
+    end
+% Initiate the freehand drawing tool
+    function drawLeftVentricle(~,~)
+        if ~isempty(gui_lvfhtool)
+            gui_lvfhtool.delete();
+        end
+        gui_lvfhtool = imfreehand(gui_mainh);
+        gui_lvfhtool.setColor([0 1 0]);
+        wait(gui_lvfhtool);
+        processLV(0);
+    end
+
+% Process Left Ventricle Data
+    function processLV(~)
+        data_shape = gui_lvfhtool.createMask();
+        data_coeff = Volume.determineAxis(data_shape);
+        
+        if ~isempty(gui_valveline)
+            gui_valveline.delete();
+        end
+        spos = valveConstraint([500 200; 600 300]);
+        gui_valveline = imdistline(gui_mainh, [spos(1,1) spos(2,1)], [spos(1,2) spos(2,2)]);
+        gui_valvelineapi = iptgetapi(gui_valveline);
+        gui_valvelineapi.setPositionConstraintFcn(@valveConstraint);
+        gui_valvelineapi.setColor([0 1 0]);
+        
+        snext = images{2};
+        gui_prev = figure('Toolbar','none',...
+          'Menubar', 'none',...
+          'Name','Short Axis View',...
+          'NumberTitle','off',...
+          'IntegerHandle','off',...
+          'Position', [0 0 300 300]);
+        imshow(snext);
+        set(gui_continuebutton, 'Enable', 'on');
+    end
+
+% Continue with next step
+    function saveAndContinue(~,~)
+        setReference(0, 0);
+        if type == 1
+            data_intersect = gui_valvelineapi.getPosition();
+            data_imagetype = get(gui_imtype, 'Value');
+            if ishghandle(gui_prev)
+                close(gui_prev);
+            end
+        elseif type == 2
+            data_shape = gui_ellipseapi.getPosition();
+        end
+        close(gui_main);
+    end
+
+%% Constraint Functions
+% Line perpendicular on long axis
+    function cpos = valveConstraint(npos)
+        const = npos(1,2)+(1/data_coeff(1))*npos(1,1);
+        cpos = [npos(1,1) npos(1,2); npos(2,1) (const-(1/data_coeff(1))*npos(2,1))];
+    end
+
+% Create a function to make the reference line go vertical only
+    function cpos = straightLineConstraint(npos)
+        cpos = [npos(1,1) npos(1,2); npos(1,1) npos(2,2)];
+    end
 
 %% Data
 data_refpix = 0;
@@ -9,9 +93,9 @@ data_coeff = [0 0];
 data_intersect = [0 0 0 0];
 data_imagetype = 1;
 
-%% Image
+%% Main Window
 % Read the image file
-s = filenames{type};
+s = images{type};
 
 % Create the main window for the gui
 gui_main = figure('Toolbar','none',...
@@ -22,19 +106,20 @@ gui_main = figure('Toolbar','none',...
 % Put the image in the window
 gui_image = imshow(s);
 gui_mainh = gca;
+set(gui_main, 'ResizeFcn', @figResize);
 fpos = get(gui_main,'Position');
 
-    function figResize(~,~)
-        fpos = get(gui_main,'Position');
-        set(gui_magslider, 'Position', [0 155 30 fpos(4)-155]);
-        set(gui_panel, 'Position', [30 155 fpos(3)-30 fpos(4)-155]);
-    end
+%% Create Widgets
+% GUI sizes
+gp_width = 130;
+gp_padding = 8;
+gp_height = 28;
+gp_bheight = 36;
 
-
+%% Scroll panel
 % Add the scroll panel.
 gui_panel = imscrollpanel(gui_main, gui_image);
 gui_zoomapi = iptgetapi(gui_panel);
-
 % Position the scroll panel to accommodate the other tools.
 set(gui_panel,'Units','pixels','Position',[30 155 fpos(3)-30 fpos(4)-155]);
 
@@ -44,28 +129,15 @@ gui_controlframe = uipanel(gui_main,...
     'Units', 'pixels','Position', [0 0 5000 150],...
     'BackgroundColor', [.6 .6 .6], 'ForegroundColor', 'w');
 
-% GUI sizes
-gp_width = 130;
-gp_padding = 8;
-gp_height = 28;
-gp_bheight = 36;
-
 %% Magnification
 % Add the Magnification box.
 gui_magnificationbox = immagbox(gui_main, gui_image);
-
 % Add the Overview tool.
 gui_overview = imoverviewpanel(gui_controlframe, gui_image);
 set(gui_overview,'Units','pixels', 'Position', [4 4 300 140]);%'Units','Normalized', 'Position',[0 0 .3 .2]);
-
 % Position the Magnification box
 pos = get(gui_magnificationbox,'Position');
 set(gui_magnificationbox,'Position',[0 0 pos(3) pos(4)]);
-
-    function magnifySlider(hObj, ~)
-        gui_zoomapi.setMagnification(get(hObj,'Value'));
-    end
-
 % Create the zoom slider
 gui_magslider = uicontrol(gui_main,...
     'Style', 'slider',...
@@ -75,7 +147,6 @@ gui_magslider = uicontrol(gui_main,...
     'Callback', {@magnifySlider}...
     );
 
-set(gui_main, 'ResizeFcn', @figResize);
 
 %% Reference Distance
 % Create a tool to measure the reference distance
@@ -85,12 +156,7 @@ gui_refdistapi.setPositionConstraintFcn(@straightLineConstraint);
 gui_refdistapi.setColor([1 0 0]);
 gui_refdistapi.addNewPositionCallback(@setReference);
 
-% Create a function to make the reference line go vertical only
-    function cpos = straightLineConstraint(npos)
-        cpos = [npos(1,1) npos(1,2); npos(1,1) npos(2,2)];
-    end
-
-% Controls
+%% Controls
 gui_refpanel = uipanel('Parent', gui_controlframe,'Title', 'Reference Measurement', 'Units', 'pixels', 'Position', [310 5 300 140]);
 
 gui_refstring = uicontrol('Parent', gui_refpanel,'Style', 'text', 'String', '0 pixels = ',...
@@ -106,86 +172,16 @@ gui_refcm = uicontrol('Parent', gui_refpanel,'Style', 'popup', 'String', '1 cm|2
         'Position', [gp_padding*2+gp_width gp_height*3 gp_width gp_height],...
         'Callback', @setReference);
 
-    function setReference(~,~)
-        data_refpix = gui_refdistapi.getDistance();
-        data_refcm = get(gui_refcm, 'Value');
-        set(gui_refstring,'String',sprintf('%3.0f pixels = ',data_refpix));
-        set(gui_factorstring,'String',sprintf('%0.4f pixels/cm',(data_refcm/data_refpix)));
-    end
-
 uicontrol('Parent', gui_refpanel,'Style', 'text', 'String', 'Factor = ',...
         'Position', [gp_padding gp_height*2 gp_width gp_height],...
         'HorizontalAlignment', 'right');
-
-%% Function Declarations
+    
+%% Create suitable controls
 gui_lvfhtool = [];
 gui_valveline = [];
 gui_valvelineapi = [];
 gui_prev = [];
 
-%% Initiate the freehand drawing tool
-    function drawLeftVentricle(~,~)
-        if ~isempty(gui_lvfhtool)
-            gui_lvfhtool.delete();
-        end
-        gui_lvfhtool = imfreehand(gui_mainh);
-        gui_lvfhtool.setColor([0 1 0]);
-        wait(gui_lvfhtool);
-        processLV(0);
-    end
-
-%% Process freehand drawing
-% Determine the long axis of the freehand drawing
-    function [bw c] = determineAxis()
-        bw = gui_lvfhtool.createMask();
-        skel = bwulterode(bw);
-        datap = zeros([sum(sum(skel)) 2]);
-        cnt = 1;
-        sz = size(skel);
-        for iy=1:sz(1)
-            for ix=1:sz(2)
-                if skel(iy,ix)
-                    datap(cnt,1) = ix;
-                    datap(cnt,2) = iy;
-                    cnt = cnt+1;
-                end
-            end
-        end
-        afit = fit(datap(:,1),datap(:,2),'poly1');
-        c = coeffvalues(afit);
-    end
-
-%% Process Left Ventricle Data
-    function processLV(~)
-        [data_shape data_coeff] = determineAxis();
-        
-        if ~isempty(gui_valveline)
-            gui_valveline.delete();
-        end
-        spos = valveConstraint([500 200; 600 300]);
-        gui_valveline = imdistline(gui_mainh, [spos(1,1) spos(1,2)], [spos(2,1)-spos(1,1) spos(2,2)-spos(1,2)]);
-        gui_valvelineapi = iptgetapi(gui_valveline);
-        gui_valvelineapi.setPositionConstraintFcn(@valveConstraint);
-        gui_valvelineapi.setColor([0 1 0]);
-        
-        snext = filenames{2};
-        gui_prev = figure('Toolbar','none',...
-          'Menubar', 'none',...
-          'Name','Short Axis View',...
-          'NumberTitle','off',...
-          'IntegerHandle','off',...
-          'Position', [0 0 300 300]);
-        imshow(snext);
-        set(gui_continuebutton, 'Enable', 'on');
-    end
-
-%% Line perpendicular on long axis
-    function cpos = valveConstraint(npos)
-        const = npos(1,2)+(1/data_coeff(1))*npos(1,1);
-        cpos = [npos(1,1) npos(1,2); npos(2,1) (const-(1/data_coeff(1))*npos(2,1))];
-    end
-    
-%% Create suitable controls
 if type == 1
     % Long axis echo
     gui_lvpanel = uipanel('Parent', gui_controlframe, 'Title', 'Analysis', 'Units', 'pixels', 'Position', [620 75 300 69]);
@@ -206,21 +202,6 @@ elseif type == 2
     gui_ellipseapi.setColor([0 1 0]);
 end
 
-%% Continue with next step
-    function saveAndContinue(~,~)
-        setReference(0, 0);
-        if type == 1
-            data_intersect = gui_valvelineapi.getPosition();
-            data_imagetype = get(gui_imtype, 'Value');
-            if ishghandle(gui_prev)
-                close(gui_prev);
-            end
-        elseif type == 2
-            data_shape = gui_ellipseapi.getPosition();
-        end
-        close(gui_main);
-    end
-
 %% Continue button
 gui_prpanel = uipanel('Parent', gui_controlframe, 'Title', 'Process', 'Units', 'pixels', 'Position', [620 5 300 69]);
 gui_continuebutton = uicontrol('Parent', gui_prpanel, 'Style', 'pushbutton', 'String', 'Continue',...
@@ -235,5 +216,7 @@ setReference(0,0);
 % Wait for the gui to close before returning
 waitfor(gui_mainh);
 
+% Create a structure that contains all data
+data = struct('factor',(data_refcm/data_refpix),'shape',data_shape,'coefficients',data_coeff,'section',data_intersect,'type',data_imagetype);
 end    
     
