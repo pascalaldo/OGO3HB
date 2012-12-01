@@ -1,4 +1,4 @@
-function [I dd] = AnalyseFrame(frame1, frame2)
+function [I dd settings] = AnalyseFrame(frame1, frame2, settings)
 %ANALYSEECHOS Calculate the volume of the left ventricle using echo images
 %   [I dd] = AnalyseEchos(filenameLongAxis, filenameShortAxis, loadOld)
 %   calculates the volume of the left ventricle using a echo image of the 
@@ -10,12 +10,16 @@ function [I dd] = AnalyseFrame(frame1, frame2)
 %   the difference in width of the chambre between both images (in cm).
 %   Furthermore the function displays a 3D model of the ventricle.
 
+%% Handle default arguments
+if nargin < 3, settings = []; end
+
 %% Load old data or launch GUI to create new data
-data1 = GUI.Measure({frame1, frame2},1);
+data1 = GUI.Measure({frame1, frame2},1,settings);
 if data1.skip, I = -1; dd = -1; return; end
-data2 = GUI.Measure({frame1, frame2},2);
+data2 = GUI.Measure({frame1, frame2},2,settings);
 if data2.skip, I = -1; dd = -1; return; end
 d = struct('f1',data1.factor,'f2',data2.factor,'freehand',data1.shape,'ellipse',data2.shape,'coefficients',data1.coefficients,'section',data1.section,'type',data1.type);
+settings = struct('type',data1.type,'refpos1',data1.refpos,'refpos2',data2.refpos,'refcm1',data1.refcm,'refcm2',data2.refcm,'ellipse',data2.shape);
 clear data1 data2;
 
 % Determine the size of the freehand drawing data

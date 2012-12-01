@@ -1,5 +1,8 @@
-function data = Measure(images, type)
+function data = Measure(images, type, settings)
 %MEASURESEGMENT Display a GUI to let the user draw the ventricle contours.
+
+%% Handle default arguments
+if nargin < 3, settings = []; end
 
 %% GUI Functions
 % Resize and move the widgets according to the window size
@@ -19,6 +22,7 @@ function data = Measure(images, type)
     function setReference(~,~)
         data_refpix = gui_refdistapi.getDistance();
         data_refcm = get(gui_refcm, 'Value');
+        data_refpos = gui_refdistapi.getPosition();
         set(gui_refstring,'String',sprintf('%3.0f pixels = ',data_refpix));
         set(gui_factorstring,'String',sprintf('%0.4f pixels/cm',(data_refcm/data_refpix)));
     end
@@ -99,6 +103,7 @@ data_coeff = [0 0];
 data_intersect = [0 0 0 0];
 data_imagetype = 1;
 data_skip = true;
+data_refpos = [0 0 0 0];
 
 %% Main Window
 % Read the image file
@@ -159,6 +164,13 @@ gui_magslider = uicontrol(gui_main,...
 % Create a tool to measure the reference distance
 gui_refdisttool = imdistline(gui_mainh, [400 400], [100 200]);
 gui_refdistapi = iptgetapi(gui_refdisttool);
+if ~isempty(settings)
+    if type == 1
+        gui_refdistapi.setPosition(settings.refpos1);
+    else
+        gui_refdistapi.setPosition(settings.refpos2);
+    end
+end
 gui_refdistapi.setPositionConstraintFcn(@straightLineConstraint);
 gui_refdistapi.setColor([1 0 0]);
 gui_refdistapi.addNewPositionCallback(@setReference);
@@ -178,6 +190,13 @@ gui_refcm = uicontrol('Parent', gui_refpanel,'Style', 'popup', 'String', '1 cm|2
         'Value', 10,...
         'Position', [gp_padding*2+gp_width gp_height*3 gp_width gp_height],...
         'Callback', @setReference);
+if ~isempty(settings)
+    if type == 1
+        set(gui_refcm, 'Value', settings.refcm1);
+    else
+        set(gui_refcm, 'Value', settings.refcm2);
+    end
+end
 
 uicontrol('Parent', gui_refpanel,'Style', 'text', 'String', 'Factor = ',...
         'Position', [gp_padding gp_height*2 gp_width gp_height],...
@@ -202,10 +221,16 @@ if type == 1
     gui_imtype = uicontrol('Parent', gui_refpanel, 'Style', 'popup', 'String', 'AP4|PSL',...
         'Value', 1,...
         'Position', [gp_padding*2+gp_width gp_padding gp_width gp_height]);
+    if ~isempty(settings)
+        set(gui_imtype, 'Value', settings.type);
+    end
 elseif type == 2
     % Short axis echo
     gui_ellipse = imellipse(gui_mainh, [600 200 100 100]);
     gui_ellipseapi = iptgetapi(gui_ellipse);
+    if ~isempty(settings)
+        gui_ellipseapi.setPosition(settings.ellipse);
+    end
     gui_ellipseapi.setColor([0 1 0]);
 end
 
@@ -218,7 +243,7 @@ gui_continuebutton = uicontrol('Parent', gui_prpanel, 'Style', 'pushbutton', 'St
 if type == 1
     set(gui_continuebutton, 'Enable', 'off');
 end
-gui_skipbutton = uicontrol('Parent', gui_prpanel, 'Style', 'pushbutton', 'String', 'Skip',...
+uicontrol('Parent', gui_prpanel, 'Style', 'pushbutton', 'String', 'Skip',...
             'Position', [gp_padding gp_padding gp_width gp_bheight],...
             'FontSize', 12, 'FontWeight', 'bold', 'BackgroundColor', [.2 0 .4], 'ForegroundColor', 'w',...
             'Callback', @discardAndContinue);
@@ -228,5 +253,5 @@ setReference(0,0);
 waitfor(gui_mainh);
 
 % Create a structure that contains all data
-data = struct('factor',(data_refcm/data_refpix),'shape',data_shape,'coefficients',data_coeff,'section',data_intersect,'type',data_imagetype,'skip',data_skip);
+data = struct('factor',(data_refcm/data_refpix),'shape',data_shape,'coefficients',data_coeff,'section',data_intersect,'type',data_imagetype,'skip',data_skip,'refpos',data_refpos,'refcm',data_refcm);
 end
