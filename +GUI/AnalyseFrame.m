@@ -1,4 +1,4 @@
-function [I dd time1 time2] = AnalyseEchos(filenameLongAxis, filenameShortAxis)
+function [I dd time1 time2] = AnalyseFrame(filenameLongAxis, filenameShortAxis)
 %ANALYSEECHOS Calculate the volume of the left ventricle using echo images
 %   [I dd] = AnalyseEchos(filenameLongAxis, filenameShortAxis, loadOld)
 %   calculates the volume of the left ventricle using a echo image of the 
@@ -22,8 +22,8 @@ end
 [frame1 frame2 time1 time2] = GUI.ChooseFrame(filenameLongAxis, filenameShortAxis);
 
 %% Load old data or launch GUI to create new data
-data1 = GUI.MeasureSegment({frame1, frame2},1);
-data2 = GUI.MeasureSegment({frame1, frame2},2);
+data1 = GUI.Measure({frame1, frame2},1);
+data2 = GUI.Measure({frame1, frame2},2);
 d = struct('f1',data1.factor,'f2',data2.factor,'freehand',data1.shape,'ellipse',data2.shape,'coefficients',data1.coefficients,'section',data1.section,'type',data1.type);
 clear data1 data2;
 

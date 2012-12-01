@@ -1,4 +1,4 @@
-function data = MeasureSegment(images, type)
+function data = Measure(images, type)
 %MEASURESEGMENT Display a GUI to let the user draw the ventricle contours.
 
 %% GUI Functions
