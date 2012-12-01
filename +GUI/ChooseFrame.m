@@ -1,4 +1,4 @@
-function [rightFrame1 rightFrame2 time1 time2] = ChooseFrame(echo1, echo2)
+function [rightFrame1 rightFrame2 time1 time2 framerate] = ChooseFrame(echo1, echo2)
 %MEASURESEGMENT Display a GUI to let the user draw the ventricle contours.
 
 %% echo
@@ -27,9 +27,9 @@ end
         set(gui_offsetslider, 'Min', -fn+1);
         os = round(get(gui_offsetslider,'Value'));
         rightFrame1 = read(movie1, fn);
-        time1 = fn/framerate;
+        time1 = fn;%/framerate;
         rightFrame2 = read(movie2, fn+os);
-        time2 = (fn+os)/framerate;
+        time2 = (fn+os); %/framerate;
         subplot(1,2,1); imshow(rightFrame1, 'Border', 'tight');
         subplot(1,2,2); imshow(rightFrame2, 'Border', 'tight');
         set(gui_framenr, 'String', sprintf('Video 1: Frame %d   Video 2: Frame %d   (Offset: %d)', fn, fn+os, os));

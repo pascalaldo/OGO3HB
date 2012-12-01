@@ -1,4 +1,4 @@
-function [timesecondpeak] = DeterminePeak() %timepressureloop,valuespressureloop)
+function [timesecondpeak] = DeterminePeak(timepressureloop,valuespressureloop)
 %Input arguments:
     %timepressureloop is a list containing a sequence of time.
     %valuespressureloop is a list containing a sequence of values of pressure.
@@ -15,13 +15,13 @@ function [timesecondpeak] = DeterminePeak() %timepressureloop,valuespressureloop
  %defined (This was not the case during testing)
 
 %% Define timepressureloop and valuespressureloop - Not in final version of program!
-databp = Nexfin.readNexfin('part');
-tbp = databp.tBP;
-bp = databp.BP;
+%databp = Nexfin.readNexfin('part');
+%tbp = databp.tBP;
+%bp = databp.BP;
 
 %Selecting a pressure curve corresponding to one heartbeat
-timepressureloop = tbp(50:200);
-valuespressureloop = bp(50:200);
+%timepressureloop = tbp(50:200);
+%valuespressureloop = bp(50:200);
 
 %% Method - Based on searching the timesecondpeak from steepest drop position
 %Differential list of the pressure values
@@ -86,7 +86,7 @@ timesecondpeak = timepressureloop(finalindex);
 %% Testing - Not in final version of program!
 %Plotting the data, timepressureloop and valuespressureloop
 figure();
-subplot(3,1,1), plot(tbp,bp)
+%subplot(3,1,1), plot(tbp,bp)
 
 %Define characteristic points in pressure curve
 %point 1 represent the point with the steepest drop
@@ -98,7 +98,7 @@ t2 = timepressureloop(plotpoint);
 v2 = valuespressureloop(plotpoint);
 t3 = timesecondpeak;
 v3 = valuespressureloop(finalindex);
-subplot(3,1,2), plot(tbp(50:200),bp(50:200),t1,v1,'o',t2,v2,'o',t3,v3,'o')
+subplot(3,1,2), plot(timepressureloop,valuespressureloop,t1,v1,'o',t2,v2,'o',t3,v3,'o')
 
 range = 1:length(diffofvalues);
 refline = 0.*range;

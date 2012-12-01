@@ -29,10 +29,10 @@ else
     if isempty(d)
         error('Please give full path and filename!'); 
     end
-    f         = [d,f,ext];
+    f         = [d filesep,f,ext];
 end
 
-[mts,mns] = xlsread(f);
+[mts,mns] = xlsread(fullfile(f));
 mts  = mts/1e6;
 if size(mns,1) > 1
     for i = 2:size(mns,1);
