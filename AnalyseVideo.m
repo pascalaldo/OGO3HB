@@ -1,4 +1,4 @@
-function [vt v vdd] = AnalyseVideo(filenameLongAxis, filenameShortAxis, filenameNexfin)
+function [vt v vdd hbt hbp] = AnalyseVideo(filenameLongAxis, filenameShortAxis, filenameNexfin)
 %ANALYSEVIDEO Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -23,23 +23,15 @@ bpdata = Nexfin.readNexfin('part',filenameNexfin);
 [frame1 frame2 framenr1 framenr2 framerate] = GUI.ChooseFrame(filenameLongAxis, filenameShortAxis);
 reftime = (framenr1/framerate);
 
-% Temporary function TODO: replace with Martijn his function
-    function [t bp] = temp1(timelist, pressurelist, time)
-        t = timelist(50:200);
-        bp = pressurelist(50:200);
-        
-        t = t-min(t);
-    end
-
 % Determine the starting point of the heartbeat
-[hbt hbp] = temp1(bpdata.tBP, bpdata.BP, reftime); % TODO: Replace with Martijns function
-hbpos = BloodPressure.DeterminePeak(hbt, hbp)
+[hbt hbp] = BloodPressure.LoopFinder(bpdata.tBP, bpdata.BP, reftime);
+hbpos = BloodPressure.DeterminePeak(hbt, hbp);
 
-framesback = ceil(hbpos*framerate)
-framesforth = ceil((max(hbt)-hbpos)*framerate)
+framesback = ceil(hbpos*framerate);
+framesforth = ceil((max(hbt)-hbpos)*framerate);
 
-framerange1 = [(framenr1-framesback) (framenr1+framesforth)]
-framerange2 = [(framenr2-framesback) (framenr2+framesforth)]
+framerange1 = [(framenr1-framesback) (framenr1+framesforth)];
+framerange2 = [(framenr2-framesback) (framenr2+framesforth)];
 
 movie1 = VideoReader(filenameLongAxis);
 frames1 = read(movie1, framerange1);
