@@ -13,7 +13,7 @@ figure(3);
 plot(v,pn,'cx-','MarkerSize',8,'MarkerEdgeColor','k');
 hold on;
 plot(v(1:lastindex),pn(1:lastindex),'mx-','LineWidth',2,'MarkerSize',8,'MarkerEdgeColor','k');
-axis([50 230 0 140]);
+axis([100 300 0 150]);
 xlabel('Volume Linker Ventrikel (mL)');
 ylabel('Veneuze Druk (mmHg)');
 title('PV Loop Proefpersoon 27');
