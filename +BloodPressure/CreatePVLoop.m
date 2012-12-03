@@ -13,10 +13,11 @@ slider = uicontrol('Style', 'slider',...
     function RefreshPlot(~,~)
         tvo = tv+get(slider, 'Value');
         
+        plv = PVloop.determinePressure(p);
         [tvn vn] = BloodPressure.EstimateVolume(tvo, v,tp);
 
         figure(3);
-        plot(p,vn,'r-');
+        plot(vn,p,'r-',vn,plv,'g-');
     end
 
 RefreshPlot();

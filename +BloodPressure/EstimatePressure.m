@@ -1,4 +1,4 @@
-  function [Pressure] = determinePressure(nexfin,loopNumber)
+function [Pressure] = EstimatePressure(values)
 
 %% Parameters
 marginMinimum = 25;
@@ -10,27 +10,11 @@ steepnessStop = 9;
 raiseBase = 0;
 raiseTop = 0;
 raiseAll = 10;
-widthFactor = 1.1;
-gradientLeft = 2;
-gradientRight = 2;
+widthFactor = 1.3;
+gradientLeft = 0.8;
+gradientRight = 0.8;
 
-% the first loop might be kinda weird because it might start in the middle
-% of a cycle, to prevent this use a loop number higher than 1 or just use an
-% empty string ('').
-if isempty(loopNumber)
-    loopNumber = 2;
-end
-
-%% Open the correct file,
-% either enter a viable file location e.g.
-% 'D:\Documents\MATLAB\\REC-205_040.csv',
-% or an empty string (''). This will let you search for an appropriate file.
-if isempty(nexfin) ~= 1
-    signals = Nexfin.readNexfin('part',nexfin);
-else
-    signals = Nexfin.readNexfin('part');
-end
-segment = signals.BP;
+segment = values;
 
 %% Searching for minimums
 i = 1 + marginMinimum;
@@ -72,10 +56,7 @@ splitValues = splitValues(splitValues~=0);
 
 %% Convert arterial pressure to ventricular pressure
 % Checking if the loop actually exists
-if loopNumber < length(splitValues)
-    fragment = segment(splitValues(loopNumber)-displacement:splitValues(loopNumber+1)-displacement);
-else display('There are not enough loops to reach the number you entered.')
-end
+fragment = segment;
 
 %% Looking for the highest en lowest gradient
 i = 1 + marginGradient;
@@ -159,12 +140,12 @@ end
 %{%
 % Remove the second % if you are going to use it for another program,
 % it will stop the graph from showing up
-plot(1:length(segment),segment,1:length(segment),fragment,1:length(segment),segmentBefore);
+plot(1:length(segment),fragment,1:length(segment),segmentBefore);
 legend('ventrical pressure','arterial pressure')
 title('pressures in different locations')
 %}
 
 %% returning the pressure
-Pressure = segment;
+Pressure = segmentBefore;
 end
 
