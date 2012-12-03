@@ -30,7 +30,7 @@ while i <= (length(values)-marginMinimum)
         end
         j = j+1;
     end
-    if totalscore > marginMinimum*1.8
+    if totalscore > marginMinimum*1.9
         minimums(i) = i;
     end
     j = 1;
