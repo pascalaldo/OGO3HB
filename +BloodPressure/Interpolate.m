@@ -1,4 +1,4 @@
-function [xi yi] = EstimateVolume(t,v, points)
+function [xi yi] = Interpolate(t,v, points)
 %PLOTVOLUME Summary of this function goes here
 %   Detailed explanation goes here
 global debug;

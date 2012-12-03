@@ -13,7 +13,9 @@ function [timesecondpeak t2] = DeterminePeak(timepressureloop,valuespressureloop
  %The selected part was 1 - 2.
  %For the final version of the program the inputarguments have to be
  %defined (This was not the case during testing)
-
+ 
+global debug;
+ 
 %% Define timepressureloop and valuespressureloop - Not in final version of program!
 %databp = Nexfin.readNexfin('part');
 %tbp = databp.tBP;
@@ -83,11 +85,6 @@ end
 finalindex = round(mean(indexlist));
 timesecondpeak = timepressureloop(finalindex);
 
-%% Testing - Not in final version of program!
-%Plotting the data, timepressureloop and valuespressureloop
-figure();
-%subplot(3,1,1), plot(tbp,bp)
-
 %Define characteristic points in pressure curve
 %point 1 represent the point with the steepest drop
 %point 2 represent the (last)point of the second local minimum
@@ -98,10 +95,17 @@ t2 = timepressureloop(plotpoint);
 v2 = valuespressureloop(plotpoint);
 t3 = timesecondpeak;
 v3 = valuespressureloop(finalindex);
+
+%% Testing - Not in final version of program!
+%Plotting the data, timepressureloop and valuespressureloop
+if debug
+figure();
+%subplot(3,1,1), plot(tbp,bp)
 subplot(3,1,2), plot(timepressureloop,valuespressureloop,t1,v1,'o',t2,v2,'o',t3,v3,'o')
 
 range = 1:length(diffofvalues);
 refline = 0.*range;
 %subplot(3,1,3), plot(range,diffofvalues,range,refline)
+end
 
 end
