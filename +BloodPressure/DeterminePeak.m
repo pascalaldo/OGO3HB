@@ -85,7 +85,7 @@ timesecondpeak = timepressureloop(finalindex);
 
 %% Testing - Not in final version of program!
 %Plotting the data, timepressureloop and valuespressureloop
-figure();
+%figure();
 %subplot(3,1,1), plot(tbp,bp)
 
 %Define characteristic points in pressure curve
@@ -98,8 +98,10 @@ t2 = timepressureloop(plotpoint);
 v2 = valuespressureloop(plotpoint);
 t3 = timesecondpeak;
 v3 = valuespressureloop(finalindex);
-subplot(3,1,2), plot(timepressureloop,valuespressureloop,t1,v1,'o',t2,v2,'o',t3,v3,'o')
+%subplot(3,1,2), plot(timepressureloop,valuespressureloop,t1,v1,'o',t2,v2,'o',t3,v3,'o')
 
 range = 1:length(diffofvalues);
 refline = 0.*range;
-subplot(3,1,3), plot(range,diffofvalues,range,refline)
+%subplot(3,1,3), plot(range,diffofvalues,range,refline)
+
+end

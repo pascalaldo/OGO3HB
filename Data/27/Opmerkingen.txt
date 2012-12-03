@@ -1,0 +1,7 @@
+Video		Nexfin		Beginmarker			Eindmarker
+AP4		REC-913		'ap4b'				'ap4e'
+AP2		REC-913		'ap2'				'ap2e'
+PSL		REC-913		'psln'				'psle'
+PSD		REC-913		'psdb'				'psde'
+ARCh		REC-913		'fb'				'fe'
+SC		REC-205		'scb'				'sce'

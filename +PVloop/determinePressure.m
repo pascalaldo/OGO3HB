@@ -1,4 +1,4 @@
-  function [Pressure] = determinePressure(Nexfin,loopNumber)
+  function [Pressure] = determinePressure(nexfin,loopNumber)
 
 %% Parameters
 marginMinimum = 25;
@@ -25,9 +25,10 @@ end
 % either enter a viable file location e.g.
 % 'D:\Documents\MATLAB\\REC-205_040.csv',
 % or an empty string (''). This will let you search for an appropriate file.
-if isempty(Nexfin) ~= 1
-    signals = readNexfin('part',Nexfin);
-else signals = readNexfin('part');
+if isempty(nexfin) ~= 1
+    signals = Nexfin.readNexfin('part',nexfin);
+else
+    signals = Nexfin.readNexfin('part');
 end
 segment = signals.BP;
 

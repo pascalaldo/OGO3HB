@@ -1,14 +1,14 @@
-function [xi yi] = EstimateVolume(data, points)
+function [xi yi] = EstimateVolume(t,v, points)
 %PLOTVOLUME Summary of this function goes here
 %   Detailed explanation goes here
 global debug;
 
 xi = points;
-yi = interp1(data(:,3),data(:,1),xi,'spline');
+yi = interp1(t,v,xi,'spline');
 
 if debug
     figure(2);
-    plot(data(:,3),data(:,1),'r.',xi,yi,'b-');
+    plot(t,v,'r.',xi,yi,'b-');
 end
 
 end

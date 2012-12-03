@@ -1,13 +1,8 @@
-function CreatePVLoop(vdata)
+function CreatePVLoop(tv, v, tp, p)
 %CREATEPVLOOP Summary of this function goes here
 %   Detailed explanation goes here
 global debug;
 debug = true;
-
-[tp p] = BloodPressure.ImportPressure();
-tp = tp(41:231);
-p = p(41:231);
-tp = tp-min(tp);
 
 figure(3);
 slider = uicontrol('Style', 'slider',...
@@ -16,12 +11,12 @@ slider = uicontrol('Style', 'slider',...
         'Callback', @RefreshPlot);
     
     function RefreshPlot(~,~)
-        ndata = vdata+get(slider, 'Value');
+        tvo = tv+get(slider, 'Value');
         
-        [tv v] = BloodPressure.EstimateVolume(ndata,tp);
+        [tvn vn] = BloodPressure.EstimateVolume(tvo, v,tp);
 
         figure(3);
-        plot(v,p);
+        plot(p,vn,'r-');
     end
 
 RefreshPlot();
