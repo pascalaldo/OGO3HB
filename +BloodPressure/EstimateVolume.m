@@ -4,7 +4,7 @@ function [xi yi] = EstimateVolume(t,v, points)
 global debug;
 
 xi = points;
-yi = interp1(t,v,xi,'spline');
+yi = interp1(t,v,xi,'linear');
 
 if debug
     figure(2);

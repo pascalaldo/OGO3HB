@@ -1,4 +1,4 @@
-function [timesecondpeak] = DeterminePeak(timepressureloop,valuespressureloop)
+function [timesecondpeak t2] = DeterminePeak(timepressureloop,valuespressureloop)
 %Input arguments:
     %timepressureloop is a list containing a sequence of time.
     %valuespressureloop is a list containing a sequence of values of pressure.
@@ -85,7 +85,7 @@ timesecondpeak = timepressureloop(finalindex);
 
 %% Testing - Not in final version of program!
 %Plotting the data, timepressureloop and valuespressureloop
-%figure();
+figure();
 %subplot(3,1,1), plot(tbp,bp)
 
 %Define characteristic points in pressure curve
@@ -98,7 +98,7 @@ t2 = timepressureloop(plotpoint);
 v2 = valuespressureloop(plotpoint);
 t3 = timesecondpeak;
 v3 = valuespressureloop(finalindex);
-%subplot(3,1,2), plot(timepressureloop,valuespressureloop,t1,v1,'o',t2,v2,'o',t3,v3,'o')
+subplot(3,1,2), plot(timepressureloop,valuespressureloop,t1,v1,'o',t2,v2,'o',t3,v3,'o')
 
 range = 1:length(diffofvalues);
 refline = 0.*range;

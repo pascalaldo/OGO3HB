@@ -4,20 +4,17 @@ function CreatePVLoop(tv, v, tp, p)
 global debug;
 debug = true;
 
+[temp mint] = BloodPressure.DeterminePeak(tp,p)
+lastindex = find(tv>mint,1,'first')
+
 figure(3);
-slider = uicontrol('Style', 'slider',...
-        'Min',-0.2,'Max',0.2,'Value',0,...
-        'Units', 'pixels', 'Position', [0 0 200 20],...
-        'Callback', @RefreshPlot);
     
-    function RefreshPlot(~,~)
-        tvo = tv+get(slider, 'Value');
-        
-        plv = PVloop.determinePressure(p);
-        [tvn vn] = BloodPressure.EstimateVolume(tvo, v,tp);
+    function RefreshPlot(~,~)        
+        [tpn pn] = BloodPressure.EstimateVolume(tp, p,tv(1:lastindex));
 
         figure(3);
-        plot(vn,p,'r-',vn,plv,'g-');
+        plot(v(1:lastindex),pn,'r.-');
+        axis([50 200 0 140]);
     end
 
 RefreshPlot();
