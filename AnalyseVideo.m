@@ -23,9 +23,30 @@ bpdata = Nexfin.readNexfin('part',filenameNexfin);
 [frame1 frame2 framenr1 framenr2 framerate] = GUI.ChooseFrame(filenameLongAxis, filenameShortAxis);
 reftime = (framenr1/framerate);
 
+figure('Name','Pressure',...
+          'NumberTitle','off',...
+          'IntegerHandle','off');
+plot(bpdata.tBP, bpdata.BP, 'r-');
+xlabel('Time (s)');
+ylabel('Pressure (mmHg)');
+title('Pressure');
+
 % Determine the starting point of the heartbeat
 [hbt hbp] = BloodPressure.LoopFinder(bpdata.tBP, bpdata.BP, reftime);
 hbpos = BloodPressure.DeterminePeak(hbt, hbp);
+
+figure('Toolbar','none',...
+          'Menubar', 'none',...
+          'Name','Selected Pressure Pulse',...
+          'NumberTitle','off',...
+          'IntegerHandle','off');
+plot(hbt, hbp, 'r-');
+hold on;
+plot([hbpos hbpos], [0 200], 'b:');
+xlabel('Time (s)');
+ylabel('Pressure (mmHg)');
+title('Selected Pressure Pulse');
+hold off;
 
 framesback = ceil(hbpos*framerate);
 framesforth = ceil((max(hbt)-hbpos)*framerate);
@@ -43,6 +64,7 @@ v = [];
 vdd = [];
 settings = [];
 for i=0:(framerange1(2)-framerange1(1))
+    fprintf('# Frame %d of %d \n', i+1,(framerange1(2)-framerange1(1)));
     [I dd settings] = Volume.AnalyseFrame(frames1(:,:,:,(i+1)),frames2(:,:,:,(i+1)),settings);
     if I ~= -1
         vt = [vt; i/framerate];

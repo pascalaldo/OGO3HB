@@ -32,7 +32,7 @@ else
     f         = [d filesep,f,ext];
 end
 
-[mts,mns] = xlsread(fullfile(f));
+[mts,mns] = xlsread(f);
 mts  = mts/1e6;
 if size(mns,1) > 1
     for i = 2:size(mns,1);

@@ -25,9 +25,6 @@ global debug;
 %timepressureloop = tbp(50:200);
 %valuespressureloop = bp(50:200);
 
-figure(4);
-plot(timepressureloop,valuespressureloop);
-
 %% Method - Based on searching the timesecondpeak from steepest drop position
 %Differential list of the pressure values
 diffofvalues = diff(valuespressureloop);

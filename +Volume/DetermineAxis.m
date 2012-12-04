@@ -1,4 +1,4 @@
-function c = DetermineAxis(bw)
+function [c bw] = DetermineAxis(bw)
 %DETERMINEAXIS determines the long axis of the freehand drawing
 skel = bwulterode(bw);
 tot = sum(sum(skel));
@@ -21,4 +21,9 @@ for iy=1:sz(1)
 end
 afit = fit(datap(:,1),datap(:,2),'poly1');
 c = coeffvalues(afit);
+if c(1) > 1
+    disp('Note: Rotating image for better results');
+    bw = bw';
+    c = [(1/c(1)) (c(2)/c(1))];
+end
 end

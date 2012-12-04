@@ -16,7 +16,7 @@ plot(v(1:lastindex),pn(1:lastindex),'mx-','LineWidth',2,'MarkerSize',8,'MarkerEd
 axis([100 300 0 150]);
 xlabel('Volume Linker Ventrikel (mL)');
 ylabel('Veneuze Druk (mmHg)');
-title('PV Loop Proefpersoon 27');
+title('PV Loop Proefpersoon 34');
 hold off;
 end
 

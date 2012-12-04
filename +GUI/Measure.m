@@ -40,7 +40,7 @@ if nargin < 3, settings = []; end
 % Process Left Ventricle Data
     function processLV(~)
         data_shape = gui_lvfhtool.createMask();
-        data_coeff = Volume.DetermineAxis(data_shape);
+        [data_coeff data_shape] = Volume.DetermineAxis(data_shape);
         
         if ~isempty(gui_valveline)
             gui_valveline.delete();
