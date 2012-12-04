@@ -23,14 +23,6 @@ bpdata = Nexfin.readNexfin('part',filenameNexfin);
 [frame1 frame2 framenr1 framenr2 framerate] = GUI.ChooseFrame(filenameLongAxis, filenameShortAxis);
 reftime = (framenr1/framerate);
 
-figure('Name','Pressure',...
-          'NumberTitle','off',...
-          'IntegerHandle','off');
-plot(bpdata.tBP, bpdata.BP, 'r-');
-xlabel('Time (s)');
-ylabel('Pressure (mmHg)');
-title('Pressure');
-
 % Determine the starting point of the heartbeat
 [hbt hbp] = BloodPressure.LoopFinder(bpdata.tBP, bpdata.BP, reftime);
 hbpos = BloodPressure.DeterminePeak(hbt, hbp);
