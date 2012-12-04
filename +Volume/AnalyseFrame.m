@@ -22,9 +22,6 @@ d = struct('f1',data1.factor,'f2',data2.factor,'freehand',data1.shape,'ellipse',
 settings = struct('type',data1.type,'refpos1',data1.refpos,'refpos2',data2.refpos,'refcm1',data1.refcm,'refcm2',data2.refcm,'ellipse',data2.shape);
 clear data1 data2;
 
-% Determine the size of the freehand drawing data
-sz = size(d.freehand);
-
 %% Short Axis Data
 % Calculate short axis ellipse ratio
 ellipse_size = d.f2.*[d.ellipse(3) d.ellipse(4)];
@@ -39,6 +36,19 @@ ellipse_ratio = ellipse_size(1)/ellipse_size(2);
 % Create the axis function of the freehand drawing
 a1 = d.coefficients(1);
 b1 = d.coefficients(2);
+
+%% Flip the image
+% Better results when the axis of the drawing is quite vertical
+if a1 > 1
+    disp('Note: Flipping image for better results');
+    d.freehand = d.freehand';
+    b1 = (b1/a1);
+    a1 = 1/a1;
+end
+
+% Determine the size of the freehand drawing data
+sz = size(d.freehand);
+
 y1 = @(x)(a1*x+b1);
 
 % Calculate the coefficients of the perpendicular function
