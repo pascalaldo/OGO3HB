@@ -1,4 +1,4 @@
-function CreatePVLoop(tv, v, tp, p)
+function CreatePVLoop(tv, v, tp, p, ppnr)
 %CREATEPVLOOP Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -9,14 +9,15 @@ lastindex = find(tv>mint,1,'first');
 v = [v; v(1)];
 pn = [pn; pn(1)];
 
-figure(3);
-plot(v,pn,'cx-','MarkerSize',8,'MarkerEdgeColor','k');
+figure('Name', sprintf('Proefpersoon %d', ppnr));
+plot(v,pn,'Color',[1 .5 0],'Marker','x','LineStyle','-','MarkerSize',8,'MarkerEdgeColor','k');
 hold on;
-plot(v(1:lastindex),pn(1:lastindex),'mx-','LineWidth',2,'MarkerSize',8,'MarkerEdgeColor','k');
-axis([100 300 0 150]);
+plot(v(1:lastindex),pn(1:lastindex),'rx-','LineWidth',2,'MarkerSize',8,'MarkerEdgeColor','k');
+plot([v(lastindex) v(lastindex) v(1) v(1)],[pn(lastindex) 5 5 pn(1)], 'Color', [.4 .4 .4], 'LineStyle', ':');
+axis([(min(v)-20) max(v)+20 0 150]);
 xlabel('Volume Linker Ventrikel (mL)');
-ylabel('Veneuze Druk (mmHg)');
-title('PV Loop Proefpersoon 34');
+ylabel('Arteriële Druk (mmHg)');
+title(sprintf('PV Loop Proefpersoon %d', ppnr), 'FontWeight', 'BOLD');
 hold off;
 end
 
