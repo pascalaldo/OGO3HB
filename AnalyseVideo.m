@@ -24,7 +24,7 @@ bpdata = Nexfin.readNexfin('part',filenameNexfin);
 reftime = (framenr1/framerate);
 
 % Determine the starting point of the heartbeat
-[hbt hbp] = BloodPressure.LoopFinder(bpdata.tBP, bpdata.BP, reftime);
+[hbt hbp] = BloodPressure.LoopFinder2(bpdata.tBP, bpdata.BP, reftime);
 hbpos = BloodPressure.DeterminePeak(hbt, hbp);
 
 figure('Toolbar','none',...
