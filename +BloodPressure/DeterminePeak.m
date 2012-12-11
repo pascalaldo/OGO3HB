@@ -39,7 +39,7 @@ selectedvalue = valuespressureloop(steepestdropindex+1);
 index = steepestdropindex+1;
 %While the current value is larger or equal to the neighbouring value, the current
 %value is replaced by the neighbouring value
-while currentvalue >= selectedvalue
+while currentvalue >= selectedvalue && selectedvalue < length(valuespressureloop)
     currentvalue = selectedvalue;
     selectedvalue = valuespressureloop(index+1);
     index = index+1;
@@ -57,7 +57,7 @@ selectedvalue = valuespressureloop(currentindex+1);
 index = currentindex+1;
 %While the current value is smaller or equal to the neighbouring value, the current
 %value is replaced by the neighbouring value
-while currentvalue <= selectedvalue
+while currentvalue <= selectedvalue && selectedvalue < length(valuespressureloop)
         currentvalue = selectedvalue;
     selectedvalue = valuespressureloop(index+1);
     index = index+1;
@@ -65,7 +65,6 @@ end
 %Current index is equal to the selected index minus one. The current index
 %corresponds to the last value that was equal to it's neigbouring value.
 currentindex = index-1;
-lastindex = currentindex;
 
 %% Third while loop to determine all indexes of the points with the same value that are equal to the second local maximum value
 currentvalue = valuespressureloop(currentindex);
@@ -102,10 +101,5 @@ if debug
 figure();
 %subplot(3,1,1), plot(tbp,bp)
 subplot(3,1,2), plot(timepressureloop,valuespressureloop,t1,v1,'o',t2,v2,'o',t3,v3,'o')
-
-range = 1:length(diffofvalues);
-refline = 0.*range;
-%subplot(3,1,3), plot(range,diffofvalues,range,refline)
 end
-
 end
