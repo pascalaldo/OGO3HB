@@ -17,7 +17,9 @@ j = 1;
 %%dan
 %%marginMinumum multiplied with a factor. The random point is a minimum. a
 %%list with minimal values is created.
-minimums = zeros(round(length(values)/50));
+minimums = zeros(1,round(length(values))); 
+%minimums is now a list instead of a matrix as it had been before the
+%adjustment
 while i <= (length(values)-marginMinimum)
     totalscore = 0;
     while j <= marginMinimum
@@ -46,7 +48,9 @@ minimums = minimums(minimums~=0);
 %%another condition is: if the list isn't empty, determine if the minimum added 
 %%with a constant marginLoop is larger than the maximum of the minimumlist. 
 %%If this is true, splitValues gets the value of the minimum.
-splitValues = zeros(length(minimums));
+splitValues = zeros(1,length(minimums));
+%splitValues is now a list instead of a matrix as is had been before the
+%adjustment.
 i = 1;
 while i <= length(minimums);
     if isempty(splitValues) == 1 && minimums(i) + marginLoop < max(minimums)
