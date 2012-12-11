@@ -1,8 +1,11 @@
 function FitModel(vt,v,hbt,hbp)
 
-x = lsqnonlin(@(par)(Fit.ModelWrapper(vt,v,hbt,hbp,1000,par)),0);
+x0 = [0];
+x = lsqnonlin(@(par)(Fit.ModelWrapper(vt,v,hbt,hbp,1000,par)),x0);
 
+% Difference using default parameters
 [odp odv] = Fit.ModelWrapper(vt,v,hbt,hbp,1000,[]);
+% Difference using optimal parameters
 [ndp ndv] = Fit.ModelWrapper(vt,v,hbt,hbp,1000,x);
 
 figure(1);

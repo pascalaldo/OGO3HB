@@ -1,4 +1,7 @@
 function [t part Vlv] = Circulation(par)
+
+% par(1) = V0
+
 %
 %      ---- Rven ----+---- Rart-------
 %      |             |               |
