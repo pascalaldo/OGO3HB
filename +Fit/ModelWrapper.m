@@ -1,4 +1,4 @@
-function [dp dv] = ModelWrapper(vt, v, hbt, hbp, tcycle, par)
+function [d dp dv] = ModelWrapper(vt, v, hbt, hbp, tcycle, par)
 %MODELWRAPPER Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -18,6 +18,8 @@ dp = hbp'-ipart;
 % Compare volume
 ivlv = interp1(mt,mvlv,vt);
 dv = v-ivlv;
+
+% TODO: Join dv and dp
 
 %% Plotting
 %{

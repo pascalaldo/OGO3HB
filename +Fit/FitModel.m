@@ -4,9 +4,9 @@ x0 = [0];
 x = lsqnonlin(@(par)(Fit.ModelWrapper(vt,v,hbt,hbp,1000,par)),x0);
 
 % Difference using default parameters
-[odp odv] = Fit.ModelWrapper(vt,v,hbt,hbp,1000,[]);
+[temp1 odp odv] = Fit.ModelWrapper(vt,v,hbt,hbp,1000,[]);
 % Difference using optimal parameters
-[ndp ndv] = Fit.ModelWrapper(vt,v,hbt,hbp,1000,x);
+[temp2 ndp ndv] = Fit.ModelWrapper(vt,v,hbt,hbp,1000,x);
 
 figure(1);
 plot(odp,'b:');
