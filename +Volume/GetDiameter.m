@@ -7,14 +7,14 @@ sz = size(data_shape1);
 % Look to the left
 i = 1;
 % Find the first point that is in the freehand drawing
-while x-i > 0
+while round(x-i) > 0
     if data_shape1(min(sz(1),max(1,round(-a2*i+y))), round(x-i)) == 1
         break;
     end
     i = i+1;
 end
 istart = i;
-while x-i > 0
+while round(x-i) > 0
     if data_shape1(min(sz(1),max(1,round(-a2*i+y))), round(x-i)) == 0
         break;
     end
