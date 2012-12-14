@@ -31,8 +31,8 @@ lp = length(par);
     end
 
 V0      = ep(1,0);		% [ml]  - intercept volume
-Epas    = 0.007;    % [kPa/ml] - passive elastance 
-Emax    = 0.3;      % [kPa/ml] - active elastance  
+Epas    = ep(2,0.007);    % [kPa/ml] - passive elastance 
+Emax    = ep(3,0.3);      % [kPa/ml] - active elastance  
 tact    = nipar(1);      % [ms]  - duration activation
 tcycle  = nipar(2);     % [ms]  - duration cycle
 %
@@ -41,11 +41,11 @@ tcycle  = nipar(2);     % [ms]  - duration cycle
 Cart    = 20;		% [ml/kPa] - compliance arterial system
 Cven    = 1000;		% [ml/kPa] - compliance venous system
 %
-Vblood  = nipar(3);		% [ml] - total blood volume;
-Vven0   = nipar(4);		% [ml] - venous blood volume at zero pressure
-Vart0   = nipar(5);      % [ml] - arterial blood volume at zero pressure
+Vblood  = nipar(3);             % [ml] - total blood volume;
+Vven0   = 0.76*Vblood;          % [ml] - venous blood volume at zero pressure
+Vart0   = Vblood - Vven0;       % [ml] - arterial blood volume at zero pressure
 %
-Rart     = 5;		% [kPa.ms/ml] - characteristic arterial impedance
+Rart    = 5;		% [kPa.ms/ml] - characteristic arterial impedance
 Rp      = 120;		% [kPa.ms/ml] - peripheral resistance
 Rven    = 1;		% [kPa.ms/ml] - venous resistance
 %

@@ -6,12 +6,12 @@ function FitModel(vt,v,hbt,hbp)
 %Determine vblood, vven and vart
 bodylength = 1.80;
 bodymass = 80;
-[vblood, vven, vart] = DetermineBloodV(bodylength,bodymass);
+[vblood] = DetermineBloodV(bodylength,bodymass);
 
-x0 = [0];
+x0 = [0,0.007,0.3];
 
 %Define new initial parameter list (nipar):
-nipar = [tact,tcycle,vblood,vven,vart];
+nipar = [tact,tcycle,vblood];
 
 %Define new parameter list with lsqnonlin
 x = lsqnonlin(@(par)(Fit.ModelWrapper(vt,v,hbt,hbp,par,nipar)),x0);
@@ -39,6 +39,6 @@ hold off;
 %plot(temp2,'r-');
 %hold off;
 
-display ('The following list contains: V0')
+display ('The following list contains: V0, Epas, Emax')
 x
 end
