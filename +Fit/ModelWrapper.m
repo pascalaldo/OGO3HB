@@ -1,13 +1,9 @@
-function [d dp dv] = ModelWrapper(vt, v, hbt, hbp, par)
+function [d dp dv] = ModelWrapper(vt, v, hbt, hbp, par, nipar)
 %MODELWRAPPER Summary of this function goes here
 %   Detailed explanation goes here
 
-[mt mpart mvlv] = Model.Circulation(par);
-if isempty(par);
-    tcycle = 1000;
-else
-    tcycle = par(3);
-end
+[mt mpart mvlv] = Model.Circulation(par,nipar);
+tcycle = nipar(2);
 
 % Find the last cycle
 lci = (find(mt > (max(mt)-tcycle), 1, 'first')-1);
