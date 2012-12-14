@@ -1,8 +1,13 @@
-function [d dp dv] = ModelWrapper(vt, v, hbt, hbp, tcycle, par)
+function [d dp dv] = ModelWrapper(vt, v, hbt, hbp, par)
 %MODELWRAPPER Summary of this function goes here
 %   Detailed explanation goes here
 
 [mt mpart mvlv] = Model.Circulation(par);
+if isempty(par);
+    tcycle = 1000;
+else
+    tcycle = par(3);
+end
 
 % Find the last cycle
 lci = (find(mt > (max(mt)-tcycle), 1, 'first')-1);
@@ -19,7 +24,8 @@ dp = hbp'-ipart;
 ivlv = interp1(mt,mvlv,vt);
 dv = v-ivlv;
 
-% TODO: Join dv and dp
+%Join dp and dv
+d = [dp';dv];
 
 %% Plotting
 %{

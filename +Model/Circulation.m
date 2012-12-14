@@ -33,8 +33,8 @@ lp = length(par);
 V0      = ep(1,0);		% [ml]  - intercept volume
 Epas    = 0.007;    % [kPa/ml] - passive elastance 
 Emax    = 0.3;      % [kPa/ml] - active elastance  
-tact    = 500;      % [ms]  - duration activation
-tcycle  = 1000;     % [ms]  - duration cycle
+tact    = ep(2,500);      % [ms]  - duration activation
+tcycle  = ep(3,1000);     % [ms]  - duration cycle
 %
 % vessels
 %

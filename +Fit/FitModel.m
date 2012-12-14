@@ -1,12 +1,20 @@
 function FitModel(vt,v,hbt,hbp)
 
-x0 = [0];
-x = lsqnonlin(@(par)(Fit.ModelWrapper(vt,v,hbt,hbp,1000,par)),x0);
+%Determine tcycle and tact and exert a correction from [s] to [ms]
+[tcycle, tact] = DetermineTime(hbt,hbp);
+tact = tact*1000;
+tcycle = tcycle*1000;
+
+%Define initial parameter list following the pattern: [V0, tact, tcycle]
+x0 = [0,tact,tcycle];
+
+%Define new parameter list with lsqnonlin
+x = lsqnonlin(@(par)(Fit.ModelWrapper(vt,v,hbt,hbp,par)),x0);
 
 % Difference using default parameters
-[temp1 odp odv] = Fit.ModelWrapper(vt,v,hbt,hbp,1000,[]);
+[temp1 odp odv] = Fit.ModelWrapper(vt,v,hbt,hbp,[]);
 % Difference using optimal parameters
-[temp2 ndp ndv] = Fit.ModelWrapper(vt,v,hbt,hbp,1000,x);
+[temp2 ndp ndv] = Fit.ModelWrapper(vt,v,hbt,hbp,x);
 
 figure(1);
 plot(odp,'b:');
@@ -20,7 +28,12 @@ hold on;
 plot(ndv,'r-');
 hold off;
 
+%figure(3);
+%plot(temp1,'b:');
+%hold on;
+%plot(temp2,'r-');
+%hold off;
+
+display ('The following list contains: [V0, tact, tcycle]')
 x
-
 end
-
