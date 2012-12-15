@@ -2,7 +2,8 @@ function [d dp dv] = ModelWrapper(vt, v, hbt, hbp, par, nipar)
 %MODELWRAPPER Summary of this function goes here
 %   Detailed explanation goes here
 
-[mt mpart mvlv] = Model.Circulation(par,nipar);
+[nmt nmpart nmvlv] = Model.Circulation(par,nipar);
+[mt mpart mvlv] = funccirc(par,nipar);
 tcycle = nipar(2);
 
 % Find the last cycle
@@ -27,10 +28,8 @@ d = [dp';dv];
 %{
 figure;
 plot(mt,mpart,hbt,hbp,hbt,dp);
-
 figure;
 plot(mt,mvlv,vt,v,vt,dv);
+figure;
 %}
-
 end
-
