@@ -26,7 +26,7 @@ d1 = f1*i*dddx2; %sqrt((f1*-a2*i)^2+(f1*i)^2);
 % Look to the right
 j = 1;
 % Find the first point that is in the freehand drawing
-while x+j < sz(2)
+while round(x+j) < sz(2)
     if data_shape1(min(sz(1),max(1,round(a2*j+y))), round(x+j)) == 1
         break;
     end
@@ -34,7 +34,7 @@ while x+j < sz(2)
 end
 jstart = j;
 % Find the first point that is zero
-while x+j < sz(2)
+while round(x+j) < sz(2)
     if data_shape1(min(sz(1),max(1,round(a2*j+y))), round(x+j)) == 0
         break;
     end
