@@ -28,8 +28,9 @@ d = [dp';dv];
 %{
 figure;
 plot(mt,mpart,hbt,hbp,hbt,dp);
+legend('mpart','hbp','dp')
 figure;
 plot(mt,mvlv,vt,v,vt,dv);
-figure;
+legend('mvlv','v','dv')
 %}
 end
