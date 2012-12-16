@@ -49,8 +49,8 @@ if abs(a1) < 1
     for i=1:fhsz(2)
         fh(min(max(round(i*a1+b1),1),fhsz(1)),i) = 1;
     end
-    figure(5);
-    imshow(fh);
+    %figure(5);
+    %imshow(fh);
 end
 
 % Determine the size of the freehand drawing data
@@ -75,10 +75,10 @@ k = 0;
 while k < sz(2)
     kx = k;
     ky = y1(kx);
-    figure(5);
-    hold on;
-    plot(kx,ky);
-    hold off;
+    %figure(5);
+    %hold on;
+    %plot(kx,ky);
+    %hold off;
     [kdata(1) kdata(2) kdata(3)] = Volume.GetDiameter(kx,ky,a2,d.freehand,d.f1,dddx2);
     if kdata(1) > 0
         xdata = [xdata; kx*dddx1];
