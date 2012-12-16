@@ -56,7 +56,7 @@ v = [];
 vdd = [];
 settings = [];
 for i=0:(framerange1(2)-framerange1(1))
-    fprintf('# Frame %d of %d \n', i+1,(framerange1(2)-framerange1(1)));
+    fprintf('# Frame %d of %d \n', i+1,(framerange1(2)-framerange1(1))+1);
     [I dd settings] = Volume.AnalyseFrame(frames1(:,:,:,(i+1)),frames2(:,:,:,(i+1)),settings);
     if I ~= -1
         vt = [vt; i/framerate];
