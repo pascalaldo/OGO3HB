@@ -63,6 +63,7 @@ for i=0:(framerange1(2)-framerange1(1))
         v = [v; I];
         vdd = [vdd; dd];
     end
+    save('temp.mat', 'vt', 'v', 'vdd', 'hbt', 'hbp');
 end
 
 end
