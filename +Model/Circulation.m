@@ -41,8 +41,8 @@ Cart    = 20;		% [ml/kPa] - compliance arterial system
 Cven    = 1000;		% [ml/kPa] - compliance venous system
 %
 Vblood  = nipar(3);             % [ml] - total blood volume;
-Vven0   = 0.76*nipar(3);          % [ml] - venous blood volume at zero pressure
-Vart0   = Vblood-Vven0;       % [ml] - arterial blood volume at zero pressure
+Vven0   = 3000; %0.76*nipar(3);          % [ml] - venous blood volume at zero pressure
+Vart0   = 500; %Vblood-Vven0;       % [ml] - arterial blood volume at zero pressure
 %
 Rart    = 5;		% [kPa.ms/ml] - characteristic arterial impedance
 Rp      = 120;		% [kPa.ms/ml] - peripheral resistance
@@ -51,7 +51,7 @@ Rven    = 1;		% [kPa.ms/ml] - venous resistance
 % discretisation
 
 dt      = 1.;		 % [ms] - time step
-ncycle  = 5;         % [-] - number of cycles
+ncycle  = 15;         % [-] - number of cycles
 ninc    = ncycle*tcycle/dt;   % [-] - number of increments
 
 % <<< parameters

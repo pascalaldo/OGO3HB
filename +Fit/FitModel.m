@@ -8,10 +8,10 @@ bodylength = 1.80;
 bodymass = 80;
 [vblood] = DetermineBloodV(bodylength,bodymass);
 
-x0 = [0,0.007,0.3];
+x0 = [0 0.007 0.3];
 
 %Define new initial parameter list (nipar):
-nipar = [tact,tcycle,vblood];
+nipar = [tact tcycle vblood];
 
 %Define new parameter list with lsqnonlin
 x = lsqnonlin(@(par)(Fit.ModelWrapper(vt,v,hbt,hbp,par,nipar)),x0);
