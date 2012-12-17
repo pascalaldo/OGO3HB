@@ -5,8 +5,8 @@ function [d dp dv] = ModelWrapper(vt, v, hbt, hbp, par, nipar)
 [mt mpart mvlv] = Model.Circulation(par,nipar);
 %[mt mpart mvlv] = funccirc(par,nipar);
 tcycle = nipar(2);
-vtimeshift = par(end);
-ptimeshift = par(end-1);
+vtimeshift = 0;%par(end);
+ptimeshift = 0;%par(end-1);
 
 % Find the last cycle
 lci = (find(mt > (max(mt)-tcycle), 1, 'first')-1);

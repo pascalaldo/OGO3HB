@@ -39,7 +39,7 @@ plot(abs(ndv),'r-');
 hold off;
 
 [oldt oldpart oldVlv] = Model.Circulation(x0,nipar);
-[newt newpart newVlv] = Model.Circulation(x,nipar);
+[newt newpart newVlv newplv] = Model.Circulation(x,nipar);
 
 figure(3);
 lci = (find(oldt > (max(oldt)-tcycle), 1, 'first')-1);
@@ -48,6 +48,14 @@ plot(hbt.*1000,hbp./7.50061683,'g-',oldt(lci:end)-oldt(lci),oldpart(lci:end),'b:
 figure(4);
 plot(vt.*1000,v,'g-',oldt(lci:end)-oldt(lci),oldVlv(lci:end),'b:',newt(lci:end)-newt(lci)+(x(end)*1000),newVlv(lci:end),'r-');
 
-display ('The following list contains: V0, Epas, Emax')
 x
+save('fit.mat','x','lci','oldt','newt','oldt','oldpart','newpart','oldVlv','newVlv','newplv','nipar');
+[pv1p pv1v] = BloodPressure.CreatePVLoop(vt,v,hbt,hbp,1);
+[pv2p pv2v] = BloodPressure.CreateBasicPVLoop((newt(lci:end)-newt(lci))',newVlv(lci:end)',(newt(lci:end)-newt(lci))',newplv(lci:end)'.*7.50061683,2);
+
+figure(5);
+plot(pv2v,pv2p,'b:',pv1v,pv1p,'r-');
+
+display ('The following list contains: V0, Epas, Emax')
+
 end
