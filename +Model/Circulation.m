@@ -37,15 +37,15 @@ tcycle  = nipar(2);     % [ms]  - duration cycle
 %
 % vessels
 %
-Cart    = 20;		% [ml/kPa] - compliance arterial system
+Cart    = nipar(6);		% [ml/kPa] - compliance arterial system
 Cven    = 1000;		% [ml/kPa] - compliance venous system
 %
 Vblood  = nipar(3);             % [ml] - total blood volume;
 Vven0   = 0.5*nipar(3);          % [ml] - venous blood volume at zero pressure
 Vart0   = 0.1*nipar(3);       % [ml] - arterial blood volume at zero pressure
 %
-Rart    = 5;		% [kPa.ms/ml] - characteristic arterial impedance
-Rp      = 120;		% [kPa.ms/ml] - peripheral resistance
+Rart    = nipar(5);		% [kPa.ms/ml] - characteristic arterial impedance
+Rp      = nipar(4);		% [kPa.ms/ml] - peripheral resistance
 Rven    = 1;		% [kPa.ms/ml] - venous resistance
 %
 % discretisation

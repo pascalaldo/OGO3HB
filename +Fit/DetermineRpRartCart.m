@@ -24,11 +24,10 @@ tdia = tdia-(tdia(1));
 tdia = tdia.*1000; % [ms]
 
 curve = fit(tdia,pdia,'exp1','StartPoint',[18 -0.100]);
-c = coeffvalues(curve)
+c = coeffvalues(curve);
 Cart = -1/(c(2)*Rp); % [ms]
 
-c = [14 -0.001];
-figure(2);plot(tdia,pdia,'b:' ,tdia,c(1).*exp(c(2).*tdia),'r-');
+%figure(2);plot(tdia,pdia,'b:' ,tdia,c(1).*exp(c(2).*tdia),'r-');
 
 end
 
