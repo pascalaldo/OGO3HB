@@ -11,9 +11,9 @@ bodymass = 80;
 %Determine Rp, Rart and Cart
 [Rp Rart Cart] = Fit.DetermineRpRartCart(hbt,hbp,vt,v);
 
-x0 = [0 0.007 0.3 0 0];
-xmin = [0 0 0 -0.1 -0.3];
-xmax = [100 0.1 3 0.1 0.3];
+x0 = [0 0.007 0.3 1000 1 0];
+xmin = [0 0 0 0 0 -0.500];
+xmax = [100 0.1 3 3000 5 0.500];
 
 %Define new initial parameter list (nipar):
 nipar = [tact tcycle vblood Rp Rart Cart];
@@ -38,20 +38,19 @@ hold on;
 plot(abs(ndv),'r-');
 hold off;
 
-[oldt oldpart oldVlv] = Model.Circulation(x0,nipar);
-[newt newpart newVlv newplv] = Model.Circulation(x,nipar);
+[oldt oldpart oldVlvs] = Model.Circulation(x0,nipar);
+[newt newpart newVlvs newVlv newplv] = Model.Circulation(x,nipar);
 
 figure(3);
-lci = (find(oldt > (max(oldt)-tcycle), 1, 'first')-1);
-plot(hbt.*1000,hbp./7.50061683,'g-',oldt(lci:end)-oldt(lci),oldpart(lci:end),'b:',newt(lci:end)-newt(lci)+(x(end-1)*1000),newpart(lci:end),'r-');
+plot(hbt,hbp,'g-',oldt,oldpart,'b:',newt,newpart,'r-');
 
 figure(4);
-plot(vt.*1000,v,'g-',oldt(lci:end)-oldt(lci),oldVlv(lci:end),'b:',newt(lci:end)-newt(lci)+(x(end)*1000),newVlv(lci:end),'r-');
+plot(vt+x(end),v,'g-',oldt,oldVlvs,'b:',newt,newVlvs,'r-');
 
 x
-save('fit.mat','x','lci','oldt','newt','oldt','oldpart','newpart','oldVlv','newVlv','newplv','nipar');
-[pv1p pv1v] = BloodPressure.CreatePVLoop(vt,v,hbt,hbp,1);
-[pv2p pv2v] = BloodPressure.CreateBasicPVLoop((newt(lci:end)-newt(lci))',newVlv(lci:end)',(newt(lci:end)-newt(lci))',newplv(lci:end)'.*7.50061683,2);
+save('fit.mat','x','oldt','newt','oldt','oldpart','newpart','oldVlvs','newVlvs','newVlv','newplv','nipar');
+[pv1p pv1v] = BloodPressure.CreatePVLoop(vt+x(end),v,hbt,hbp,1);
+[pv2p pv2v] = BloodPressure.CreateBasicPVLoop(newt',newVlv',newt',newplv',2);
 
 figure(5);
 plot(pv2v,pv2p,'b:',pv1v,pv1p,'r-');

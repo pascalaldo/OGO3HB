@@ -4,27 +4,15 @@ function [d dp dv] = ModelWrapper(vt, v, hbt, hbp, par, nipar)
 
 [mt mpart mvlv] = Model.Circulation(par,nipar);
 %[mt mpart mvlv] = funccirc(par,nipar);
-tcycle = nipar(2);
-vtimeshift = 0;%par(end);
-ptimeshift = 0;%par(end-1);
-
-% Find the last cycle
-lci = (find(mt > (max(mt)-tcycle), 1, 'first')-1);
-mt = mt(lci:end);
-mt = (mt-mt(1))./1000; % Convert from ms to s
-mpart = mpart(lci:end).*7.50061683; % Convert from kPa to mmHg
-mvlv = mvlv(lci:end);
-
-% Apply shift
-mtv = mt+vtimeshift;
-mtp = mt+ptimeshift;
 
 % Compare pressure
-ipart = interp1(mtp,mpart,hbt,'linear','extrap');
+ipart = interp1(mt,mpart,hbt,'linear','extrap');
 dp = hbp'-ipart;
 
 % Compare volume
-ivlv = interp1(mtv,mvlv,vt,'linear','extrap');
+vtimeshift = par(end);
+vt = vt+vtimeshift;
+ivlv = interp1(mt,mvlv,vt,'linear','extrap');
 dv = v-ivlv;
 
 %Join dp and dv

@@ -1,4 +1,4 @@
-function [t part Vlv plv] = Circulation(par, nipar)
+function [mt mpart mvlvs mvlv mplv] = Circulation(par, nipar)
 % par(1) = V0
 
 %
@@ -38,7 +38,7 @@ tcycle  = nipar(2);     % [ms]  - duration cycle
 % vessels
 %
 Cart    = nipar(6);		% [ml/kPa] - compliance arterial system
-Cven    = 1000;		% [ml/kPa] - compliance venous system
+Cven    = ep(4,1000);		% [ml/kPa] - compliance venous system
 %
 Vblood  = nipar(3);             % [ml] - total blood volume;
 Vven0   = 0.5*nipar(3);          % [ml] - venous blood volume at zero pressure
@@ -46,7 +46,7 @@ Vart0   = 0.1*nipar(3);       % [ml] - arterial blood volume at zero pressure
 %
 Rart    = nipar(5);		% [kPa.ms/ml] - characteristic arterial impedance
 Rp      = nipar(4);		% [kPa.ms/ml] - peripheral resistance
-Rven    = 1;		% [kPa.ms/ml] - venous resistance
+Rven    = ep(5,1);		% [kPa.ms/ml] - venous resistance
 %
 % discretisation
 
@@ -123,6 +123,19 @@ plot(Vlv,plv,'linewidth',2)
 xlabel('volume [ml]','FontSize',16);
 ylabel('pressure [kPa]','FontSize',16);
 %}
+
+tcycle = nipar(2);
+vtimeshift = round(par(end)*1000);
+
+% Find the last cycle
+lcib = (find(t > (max(t)-(2*tcycle)), 1, 'first')-1);
+lcie = (find(t > (max(t)-tcycle), 1, 'first')-1);
+mt = t(lcib:lcie);
+mt = (mt-mt(1))./1000; % Convert from ms to s
+mpart = part(lcib:lcie).*7.50061683; % Convert from kPa to mmHg
+mplv = plv(lcib:lcie).*7.50061683; % Convert from kPa to mmHg
+mvlv = Vlv(lcib:lcie);
+mvlvs = Vlv((lcib+vtimeshift):(lcie+vtimeshift));
 
 end
 
