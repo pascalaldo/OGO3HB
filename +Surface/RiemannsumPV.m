@@ -1,5 +1,5 @@
-function [Surface] = RiemanssomPV(parameters)
-[x y] = circulation(); %[x y] = circulation(paramters);
+function [Surface] = RiemannsumPV(x,nipar)
+[te1 te2 te3 x y] = Model.Circulation(x,nipar);
 plot(x,y)
 
 %% Parameters
