@@ -27,7 +27,7 @@ factor1 = length(dp)/length(dv);
 dv = dv.*factor1;
 %factor2 = length(dp)/length(dplv);
 %dplv = dplv.*factor2;
-d = [dv;dp']; %;dplv'
+d = [dv;dp']; %dplv';
 
 %% Plotting
 %{

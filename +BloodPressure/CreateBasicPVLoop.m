@@ -8,6 +8,7 @@ function [pn v] = CreateBasicPVLoop(tv, v, tp, p, ppnr)
 v = [v; v(1)];
 pn = [pn; pn(1)];
 
+%{
 figure('Name', sprintf('Proefpersoon %d', ppnr));
 plot(v,pn,'Color',[1 .5 0],'Marker','x','LineStyle','-','MarkerSize',8,'MarkerEdgeColor','k');
 hold on;
@@ -17,6 +18,7 @@ xlabel('Volume Linker Ventrikel (mL)');
 ylabel('Arteriële Druk (mmHg)');
 title(sprintf('PV Loop Proefpersoon %d', ppnr), 'FontWeight', 'BOLD');
 hold off;
+%}
 
 end
 

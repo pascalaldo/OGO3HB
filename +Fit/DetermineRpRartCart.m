@@ -1,4 +1,4 @@
-function [Rp Rart Cart] = DetermineRpRartCart(hbt, hbp, vt, v)
+function [Rp Rart Cart] = DetermineRpRartCart(hbt, hbp, vt, v, ppnr)
 %DETERMINERPRARTCART Summary of this function goes here
 %   Detailed explanation goes here
 
@@ -27,7 +27,10 @@ curve = fit(tdia,pdia,'exp1','StartPoint',[18 -0.100]);
 c = coeffvalues(curve);
 Cart = -1/(c(2)*Rp); % [ms]
 
-%figure(2);plot(tdia,pdia,'b:' ,tdia,c(1).*exp(c(2).*tdia),'r-');
+f1 = figure(2);
+plot(tdia,pdia,'b:' ,tdia,c(1).*exp(c(2).*tdia),'r-');
+saveas(f1,sprintf('FitResults\\%d\\rfit_%d.fig',ppnr,ppnr));
+close(f1);
 
 end
 

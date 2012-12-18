@@ -1,4 +1,5 @@
 function [mt mpart mvlvs mvlv mplv] = Circulation(par, nipar)
+global showplots;
 % par(1) = V0
 
 %
@@ -98,7 +99,8 @@ while(j<=ninc)
 end
 
 %% Plotting
-%{
+%
+if showplots
 figure;
 subplot(2,2,1)
 hold on
@@ -122,7 +124,8 @@ hold on
 plot(Vlv,plv,'linewidth',2)
 xlabel('volume [ml]','FontSize',16);
 ylabel('pressure [kPa]','FontSize',16);
-%}
+%
+end
 
 tcycle = nipar(2);
 vtimeshift = round(par(end)*1000);
