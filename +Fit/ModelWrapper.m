@@ -6,12 +6,13 @@ function [d dp dv] = ModelWrapper(vt, v, hbt, hbp, par, nipar)
 %[mt mpart mvlv] = funccirc(par,nipar);
 
 % Compare arterial pressure
-ipart = interp1(mt,mpart,hbt,'linear','extrap');
-dp = hbp'-ipart;
+[temp mint] = BloodPressure.DeterminePeak(hbt,hbp);
+lastindex = find(hbt>mint,1,'first');
 
-% Compare lv pressure
-%[temp mint] = BloodPressure.DeterminePeak(hbt,hbp);
-%lastindex = find(hbt>mint,1,'first');
+ipart = interp1(mt,mpart,hbt(1:lastindex),'linear','extrap');
+dp = hbp(1:lastindex)'-ipart;
+figure; plot(hbt(1:lastindex),hbp(1:lastindex),'b-',hbt(1:lastindex),ipart,'r-',hbt(1:lastindex),abs(dp),'g-');
+
 %iplv = interp1(mt,mplv,hbt(1:lastindex),'linear','extrap');
 %dplv = hbp(1:lastindex)'-iplv;
 %figure; plot(hbt(1:lastindex),hbp(1:lastindex),'b-',hbt(1:lastindex),iplv,'r-',hbt,ipart,'g:');

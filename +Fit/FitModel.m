@@ -11,9 +11,9 @@ bodymass = 80;
 %Determine Rp, Rart and Cart
 [Rp Rart Cart] = Fit.DetermineRpRartCart(hbt,hbp,vt,v,ppnr);
 
-x0 = [0 0.007 0.3 1000 1 0];
-xmin = [0 0 0 0 0 -0.500];
-xmax = [100 0.1 3 3000 5 0.500];
+x0 = [0 0.007 0.3 0];
+xmin = [0 0 0 -0.500];
+xmax = [100 0.1 3 0.500];
 
 %Define new initial parameter list (nipar):
 nipar = [tact tcycle vblood Rp Rart Cart];
