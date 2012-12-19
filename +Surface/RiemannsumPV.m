@@ -17,12 +17,16 @@ for i = 1:numBins
     binMembers     = y(flagBinMembers);
     pressureTop    = binMembers(binMembers>sum(binMembers)/length(binMembers));
     pressureBottom = binMembers(binMembers<sum(binMembers)/length(binMembers));
-    binLength(i)     = mean(pressureTop) - mean(pressureBottom);
+    binLength(i)   = mean(pressureTop) - mean(pressureBottom);
+    if isempty(pressureTop) || isempty(pressureBottom)
+        binLength(i) = binLength(i-1); % Fix for empty bins
+    end
 end
 
 %% Calculate the total surface
 stepSize = (maxValue-minValue)/numBins;
 i = 1;
+total = 0;
 while i <= numBins
     total = total + stepSize*binLength(i);
     hold on
